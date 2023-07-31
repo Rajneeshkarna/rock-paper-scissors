@@ -1,33 +1,53 @@
-let arr = ['Rock', 'Paper', 'Scissors'];
-let computerSelection = arr[Math.floor(Math.random()*3)];
-let mySelection = prompt('What would you choose?');
-if(computerSelection === 'Rock' && mySelection === 'Rock'){
-    console.log("It's a tie.")
-}
-else if(computerSelection === 'Rock' && mySelection === 'Paper'){
-    console.log("Congrats! you won.")
-}
-else if(computerSelection === 'Rock' && mySelection === 'Scissors'){
-    console.log("Alas! you lost.")
-}
-else if(computerSelection === 'Paper' && mySelection === 'Paper'){
-    console.log("It's a tie.")
-}
-else if(computerSelection === 'Paper' && mySelection === 'Scissors'){
-    console.log("Congrats! you won.")
-}
-else if(computerSelection === 'Scissors' && mySelection === 'Scissors'){
-    console.log("It's a tie.")
-}
-else if(computerSelection === 'Paper' && mySelection === 'Rock'){
-    console.log("Alas, you lost.")
-}
-else if(computerSelection === 'Scissors' && mySelection === 'Rock'){
-    console.log("Congrats! You won.")
-}
-else if(computerSelection === 'Scissors' && mySelection === 'Paper'){
-    console.log("Alas! You lost.")
+function computerTurn() {
+    const choices = ['rock', 'paper', 'scissors'];
+    const randomIndex = Math.floor(Math.random()*choices.length);
+    return choices[randomIndex];
 }
 
-console.log(computerSelection);
-console.log(mySelection);
+function userTurn() {
+    let userInput = prompt('What would you choose: rock, paper, scissors?');
+    return userInput.toLowerCase();
+}
+
+function playGame(computerSaid, userSaid){
+    if(computerSaid === userSaid){
+        return 'It is a tie.';
+    }
+    else if(
+         (computerSaid === 'rock' && userSaid === 'paper')||
+         (computerSaid === 'paper' && userSaid === 'scissors')||
+         (computerSaid === 'scissors' && userSaid === 'rock') 
+        )
+    {
+        return 'Congrats! you won.';
+    }
+    else{
+        return 'Alas! You lost.';
+    }
+}
+
+function game(){
+    let playerWins = 0;
+    let computerWins = 0;
+    for(let i = 0; i < 5; i++) {
+    let computerSaid = computerTurn();
+    let userSaid = userTurn();
+    let result = playGame(computerSaid, userSaid);
+    console.log(result);
+        if(result.includes('Congrats!')){
+            playerWins++;
+        }
+        else if(result.includes('Alas!')){
+            computerWins++;
+        }
+    }
+     if (playerWins > computerWins) {
+    console.log("You are the ultimate winner!");
+  } else if (playerWins < computerWins) {
+    console.log("The computer is the ultimate winner!");
+  } else {
+    console.log("It's a tie! No ultimate winner.");
+  }
+    
+}
+game();
