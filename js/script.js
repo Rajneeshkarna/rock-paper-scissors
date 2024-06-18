@@ -1,53 +1,93 @@
-function computerTurn() {
-    const choices = ['rock', 'paper', 'scissors'];
-    const randomIndex = Math.floor(Math.random()*choices.length);
-    return choices[randomIndex];
-}
+    let score = JSON.parse(localStorage.getItem('score')) ||
+       {
+          wins: 0,
+          losses: 0,
+          ties: 0
+        };
+   
+      updateScore();
+      
+      function updateScore(){
+         document.querySelector('.js-score').innerHTML = `Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`;
+      }
 
-function userTurn() {
-    let userInput = prompt('What would you choose: rock, paper, scissors?');
-    return userInput.toLowerCase();
-}
+      function pickComputerMove(){
+        let computerMove = '';
 
-function playGame(computerSaid, userSaid){
-    if(computerSaid === userSaid){
-        return 'It is a tie.';
-    }
-    else if(
-         (computerSaid === 'rock' && userSaid === 'paper')||
-         (computerSaid === 'paper' && userSaid === 'scissors')||
-         (computerSaid === 'scissors' && userSaid === 'rock') 
-        )
-    {
-        return 'Congrats! you won.';
-    }
-    else{
-        return 'Alas! You lost.';
-    }
-}
+        const randomNumber = Math.random();
 
-function game(){
-    let playerWins = 0;
-    let computerWins = 0;
-    for(let i = 0; i < 5; i++) {
-    let computerSaid = computerTurn();
-    let userSaid = userTurn();
-    let result = playGame(computerSaid, userSaid);
-    console.log(result);
-        if(result.includes('Congrats!')){
-            playerWins++;
+        if(randomNumber < 1/3){
+          computerMove = 'rock';
         }
-        else if(result.includes('Alas!')){
-            computerWins++;
+        else if(randomNumber  < 2/3){
+          computerMove = 'paper';
         }
-    }
-     if (playerWins > computerWins) {
-    console.log("You are the ultimate winner!");
-  } else if (playerWins < computerWins) {
-    console.log("The computer is the ultimate winner!");
-  } else {
-    console.log("It's a tie! No ultimate winner.");
-  }
-    
+        else{
+          computerMove = 'scissors';
+        }
+        return computerMove;
+      }
+
+      function playgame(playerMove){
+
+        let result = '';
+
+        const computerMove = pickComputerMove();
+
+        if(playerMove === 'rock'){
+
+          if(computerMove === 'rock'){
+            result = 'Tie.';
+          }
+          else if(computerMove === 'paper'){
+            result = 'You lose.';
+          }
+          if(computerMove === 'scissors'){
+            result = 'You won.'
+          }
+        }
+
+        else if(playerMove === 'paper'){
+          
+          if(computerMove === 'rock'){
+            result = 'You won.';
+          }
+          else if(computerMove === 'paper'){
+            result = 'Tie.';
+          }
+          if(computerMove === 'scissors'){
+            result = 'You lose.';
+          }
+        }
+
+        if(playerMove === 'scissors'){
+          
+          if(computerMove === 'rock'){
+            result = 'You lose.';
+          }
+          else if(computerMove === 'paper'){
+            result = 'You won.';
+          }
+          if(computerMove === 'scissors'){
+            result = 'Tie.';
+          }
+        }
+      
+        if(result === 'You won.'){
+          score.wins++;
+        }
+        else if(result === 'You lose.'){
+          score.losses++;
+        }
+        else if(result === `Tie.`){
+          score.ties++;
+        }
+
+        localStorage.setItem('score', JSON.stringify(score));
+        
+        document.querySelector('.js-result').innerHTML = `${result}`;
+        
+        document.querySelector('.js-move').innerHTML = `You ${playerMove} - ${computerMove} Computer`;
+
+        updateScore();
 }
-game();
